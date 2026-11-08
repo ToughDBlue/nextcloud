@@ -8,6 +8,9 @@ services:
     volumes:
       - nextcloud_aio_mastercontainer:/mnt/docker-aio-config # This line is not allowed to be changed as otherwise the built-in backup solution will not work
       - /var/run/docker.sock:/var/run/docker.sock:ro # May be changed on macOS, Windows or docker rootless. See the applicable documentation. If adjusting, don't forget to also set 'WATCHTOWER_DOCKER_SOCKET_PATH'!
+    environment:
+      # Point to the host directory where the USB drive is mounted.
+      - NEXTCLOUD_MOUNT=/mnt/usb-drive1
     devices: ["/dev/dri"] # Uncomment to enable hardware acceleration. ⚠️⚠️⚠️ Warning: this only works if the '/dev/dri' device is present on the host! If it should not exist on your host, don't add this as otherwise the mastercontainer will fail to start! See https://github.com/nextcloud/all-in-one#how-to-enable-hardware-acceleration-for-nextcloud
     network_mode: bridge # This adds the container to the same network as docker run would do. Comment this line and uncomment the line below and the networks section at the end of the file if you want to define a custom MTU size for the docker network
     # networks: ["nextcloud-aio"]
@@ -44,6 +47,7 @@ services:
 #   # Optional: Caddy reverse proxy. See https://github.com/nextcloud/all-in-one/discussions/575
 #   # Alternatively, if you don't have a domain yet, use the built-in deSEC free domain registration in the AIO interface, or use Tailscale. See https://github.com/nextcloud/all-in-one#how-to-get-a-free-domain-via-desec and https://github.com/nextcloud/all-in-one/discussions/6817
 #   # Hint: You need to uncomment APACHE_PORT: 11000 above, adjust cloud.example.com to your domain and uncomment the necessary docker volumes at the bottom of this file in order to make it work
+#   # You can find further examples here: https://github.com/nextcloud/all-in-one/discussions/588
 #   caddy:
 #     image: caddy:alpine
 #     restart: always
